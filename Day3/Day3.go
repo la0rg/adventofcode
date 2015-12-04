@@ -11,6 +11,35 @@ type house struct {
 	Y int
 }
 
+type santa struct {
+	position      house
+	visitedHouses map[house]bool
+}
+
+func NewSanta(houses map[house]bool) *santa {
+	s := &santa{visitedHouses: houses, position: *new(house)}
+	s.visitedHouses[s.position] = true
+	return s
+}
+
+func (s *santa) GoTo(direction string) {
+	switch direction {
+	case "^":
+		s.position.Y++
+	case "v":
+		s.position.Y--
+	case ">":
+		s.position.X++
+	case "<":
+		s.position.X--
+	}
+	s.visitedHouses[s.position] = true
+}
+
+func (s *santa) CountOfVisitedHouses() int {
+	return len(s.visitedHouses)
+}
+
 func main() {
 	data, err := ioutil.ReadFile("day3data.txt")
 	if err != nil {
@@ -18,24 +47,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	var x, y int
 	houses := make(map[house]bool)
-	houses[house{x, y}] = true // start at (0,0) coordinates
-	for _, val := range data {
-		switch string(val) {
-		case "^":
-			y++
-			houses[house{x, y}] = true
-		case "v":
-			y--
-			houses[house{x, y}] = true
-		case ">":
-			x++
-			houses[house{x, y}] = true
-		case "<":
-			x--
-			houses[house{x, y}] = true
+	realSanta := NewSanta(houses)
+	roboSanta := NewSanta(houses)
+	for i, val := range data {
+		if i%2 != 0 {
+			realSanta.GoTo(string(val))
+		} else {
+			roboSanta.GoTo(string(val))
 		}
 	}
-	fmt.Println(len(houses))
+	fmt.Println(realSanta.CountOfVisitedHouses())
 }
