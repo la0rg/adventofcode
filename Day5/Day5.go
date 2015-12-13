@@ -16,8 +16,8 @@ func main() {
 		os.Exit(1)
 	}
 	arr := strings.Split(string(data), "\n")
-	processing(arr, isNice)
-	processing(arr, func(str string) bool { return findPairs(str) && singleLetterBetween(str) })
+	processing(arr, isNice)                                                                      // part1
+	processing(arr, func(str string) bool { return findPairs(str) && singleLetterBetween(str) }) // part2
 }
 
 func processing(arr []string, f func(str string) bool) {
