@@ -17,7 +17,12 @@ Belfast -> Dublin -> London = 605
 Belfast -> London -> Dublin = 982
 The shortest of these is London -> Dublin -> Belfast = 605, and so the answer is 605 in this example.
 
-What is the distance of the shortest route?*/
+What is the distance of the shortest route?
+
+EDIT: That's a hacky solution because hungry algorithm DO NOT garantee that will find smallest(biggest) value
+But works pretty well on small amout of variables
+Also works really fast without any garantee
+*/
 
 package main
 
@@ -59,7 +64,6 @@ func main() {
 			smallestDistance = d
 		}
 	}
-	fmt.Printf("SMALLEST PATH IS: %d\n", smallestDistance)
 	var biggestDistance int
 	for cityName := range g {
 		d := Distance(g, cityName, false)
@@ -67,6 +71,7 @@ func main() {
 			biggestDistance = d
 		}
 	}
+	fmt.Printf("SMALLEST PATH IS: %d\n", smallestDistance)
 	fmt.Printf("BIGGEST PATH IS: %d\n", biggestDistance)
 
 }
