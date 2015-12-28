@@ -1,9 +1,15 @@
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by la0rg on 27.12.2015.
@@ -18,6 +24,40 @@ public class Day12 {
         String[] ar = json.replaceAll("[^-0-9]+", " ").trim().split(" ");
         int sum = Arrays.stream(ar).mapToInt(Integer::parseInt).sum();
         System.out.println(sum);
+
+        // Part 2
+        // Ignore any object (and all of its children) which has any property with the value "red".
+        // Do this only for objects ({...}), not arrays ([...]).
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(json);
+        System.out.println("Sum2: " + evalElement(element));
+    }
+
+    static int evalElement(JsonElement element) {
+        int sum = 0;
+        if (element.isJsonObject()) {
+            Set<Map.Entry<String, JsonElement>> entries = element.getAsJsonObject().entrySet();
+            if (entries != null) {
+                // check that set doesn't contains value equals "red"
+                if (entries.stream().anyMatch(entry -> entry.getValue().isJsonPrimitive()
+                        && entry.getValue().getAsJsonPrimitive().getAsString().equals("red"))) {
+                    return 0;
+                }
+                for (Map.Entry<String, JsonElement> entry : entries) {
+                    sum += evalElement(entry.getValue());
+                }
+            }
+        } else if (element.isJsonArray()) {
+            JsonArray ar = element.getAsJsonArray();
+            for (JsonElement elem : ar) {
+                sum += evalElement(elem);
+            }
+        } else if (element.isJsonPrimitive()) {
+            if (element.getAsJsonPrimitive().isNumber()) {
+                sum += element.getAsJsonPrimitive().getAsNumber().intValue();
+            }
+        }
+        return sum;
     }
 
     static String readFile(String path, Charset encoding) throws IOException {
