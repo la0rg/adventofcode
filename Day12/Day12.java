@@ -1,4 +1,3 @@
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -38,18 +37,16 @@ public class Day12 {
         if (element.isJsonObject()) {
             Set<Map.Entry<String, JsonElement>> entries = element.getAsJsonObject().entrySet();
             if (entries != null) {
-                // check that set doesn't contains value equals "red"
-                if (entries.stream().anyMatch(entry -> entry.getValue().isJsonPrimitive()
-                        && entry.getValue().getAsJsonPrimitive().getAsString().equals("red"))) {
-                    return 0;
-                }
                 for (Map.Entry<String, JsonElement> entry : entries) {
+                    if (entry.getValue().isJsonPrimitive()
+                            && entry.getValue().getAsJsonPrimitive().getAsString().equals("red")) {
+                        return 0;
+                    }
                     sum += evalElement(entry.getValue());
                 }
             }
         } else if (element.isJsonArray()) {
-            JsonArray ar = element.getAsJsonArray();
-            for (JsonElement elem : ar) {
+            for (JsonElement elem : element.getAsJsonArray()) {
                 sum += evalElement(elem);
             }
         } else if (element.isJsonPrimitive()) {
