@@ -4,6 +4,7 @@ import com.google.common.collect.Collections2;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.ClassLoader.getSystemClassLoader;
 
@@ -53,9 +54,7 @@ public class Day13 {
 
             // Add yourself for Part2
             rules.forEach((s, v) -> v.add(new Rule("myself", 0)));
-            List<Rule> rulesToMyself = new ArrayList<>();
-            people.forEach(name -> rulesToMyself.add(new Rule(name, 0)));
-            rules.put("myself", rulesToMyself);
+            rules.put("myself", people.stream().map(name -> new Rule(name, 0)).collect(Collectors.toList()));
             people.add("myself");
 
             // Check all permutations and find optimal seating arrangement (in terms of total change of happiness)
