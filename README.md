@@ -2,4 +2,4 @@ Advent of Code is a series of small programming puzzles for a variety of skill l
 
 Link: http://adventofcode.com/
 
-Here's my interpretation of the puzzles in Go.
+Here's my interpretation of the puzzles in Go/Java (finally moved to).
